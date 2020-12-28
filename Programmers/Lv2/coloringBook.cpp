@@ -45,6 +45,6 @@ int main() {
 	vector<vector<int>> p = { {1,1,1,0},{1,2,2,0},{1,0,0,1},{0,0,0,1},{0,0,0,3},{0,0,0,3} };
 	vector<int> answer = solution(6, 4, p);
 	for (int i = 0; i < answer.size(); i++) {
-		cout << answer[i] << ' ';
+		cout << answer[i] << ' '; 
 	}
 }
