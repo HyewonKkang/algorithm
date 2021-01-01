@@ -15,4 +15,4 @@ def hanoi(n, start, to, via):
 
 n = int(input())
 print(2**n - 1)
-hanoi(3, 1, 3, 2)
+hanoi(n, 1, 3, 2)
