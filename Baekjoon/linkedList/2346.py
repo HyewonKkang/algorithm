@@ -11,6 +11,9 @@ class CircularLinkedList:
     def isEmpty(self):
         return self.size == 0
 
+    def getSize(self):
+        return self.size
+
     def insert(self, data):
         new_node = self.Node(data, None)
         if self.isEmpty():
@@ -30,32 +33,37 @@ class CircularLinkedList:
         self.size -= 1
         return del_node.data
 
-    def print_list(self, idx):
+
+    def print_list(self, N, ballon):
         s = ''
         p = self.last
-        for i in range(idx):
-            p = p.next
-        s += str(self.delete(p)) + ' '
-
+        idx = 0
+        for i in range(N):
+            if i == 0:
+                K = 1
+            else:
+                K = ballon[idx]
+            if K < 0:
+                while K <= 0:
+                    K += self.getSize()
+                K += 1
+            for j in range(K-1):
+                    p = p.next
+            del_node = self.delete(p)
+            s += str(del_node)
+            idx = del_node
+            if self.isEmpty():
+                pass
+            else:
+                s += ' '
         return s
 
-if __name__ == '__main__':
-    N = int(input())
-    c = CircularLinkedList()
-    L = list(map(int, input().split()))
-    ballon = {}
-    for i in range(1, N+1):
-        c.insert(i)
-        ballon[i] = L[i - 1]
-    print(ballon)
-    idx = 1
-    isFirst = 0
-    while(c.isEmpty() != 1):
-        if(isFirst == 0):
-            print(c.print_list(0), end = '')
-            isFirst += 1
-            continue
-        idx = idx + ballon[idx]
-        print(c.print_list(idx), end='')
-        # c.delete(idx)
-
+N = int(input())
+L = list(map(int, input().split()))
+ballon = {}
+for i in range(1, N+1):
+    ballon[i] = L[i-1]
+c = CircularLinkedList()
+for i in range(N, 0, -1):
+    c.insert(i)
+print(c.print_list(N, ballon), end = '')
