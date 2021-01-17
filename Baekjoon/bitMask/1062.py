@@ -1,41 +1,40 @@
-from collections import deque
+# 메모리 초과,,,
+# 파이썬으로는 풀 수 없는 문제인 것인가,,,, - from google,,,
+# 다음에 c++로 풀어볼 것,,,,
 from itertools import combinations
-N, K = map(int, input().split())
+from sys import stdin
+N, K = map(int, stdin.readline().split())
 alphabets = ['a', 'n', 't', 'i', 'c']
 K -= 5
 new_list = []
-answer = 0
+letters = []
+answer = []
+failure = 0; result = 0
 for i in range(N):
     if K < 1:
+        failure = 1
         break
-    dq = deque()
-    input_ = input()
+    input_ = stdin.readline()[4:-5]
     list_ = list(input_)
-    for k in list_:
-        dq.append(k)
-    for _ in range(3):
-        dq.popleft()
-        dq.pop()
-    cnt = len(dq)
-    for letter in list(dq):
-        if letter in alphabets:
-            dq.remove(letter)
     str = ''
-    for a in dq:
-        str += a
+    for letter in list_:
+        if letter not in alphabets:
+            letters.append(letter)
+            str += letter
     new_list.append(str)
 
-new_list.sort(key=len)
-
-remainder = {'b':0,'d':0,'e':0,'f':0,'g':0,'h':0,
-             'j':0,'k':0,'l':0,'m':0,'o':0,'p':0,
-             'q':0,'r':0,'s':0,'u':0,'v':0,'w':0,
-             'x':0,'y':0,'z':0}
-letters = []
-for i in list(combinations(remainder, K)):
-    for j in i:
-        if j in new_list:
-
-
-
-print(answer)
+if failure == 1:
+    pass
+else:
+    for subset in list(combinations(letters, K)):
+        cnt_ = 0
+        cnt = [0] * N
+        for i in range(len(subset)):
+            for j in range(N):
+                cnt[j] += new_list[j].count(subset[i])
+        for i in range(N):
+            if cnt[i] == len(new_list[i]):
+                cnt_ += 1
+        if result < cnt_:
+            result = cnt_
+print(result)
