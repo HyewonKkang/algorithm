@@ -1,14 +1,14 @@
-def combinations(N, M):
-    result = 1
-    if N != M:
-        for i in range(M, M - N, -1):
-            result *= i
-        for i in range(N, 0, -1):
-            result //= i
-    return result
-
-
 T = int(input())
 for _ in range(T):
-    N, M = map(int, input().split())
-    print(combinations(N, M))
+    n, m = map(int, input().split())
+    d = [[0] * (m + 1) for _ in range(n + 1)]
+    for i in range(m + 1):
+        d[1][i] = i
+    for i in range(2, n + 1):
+        for j in range(i, m + 1):
+            if i == j:
+                d[i][j] = 1
+                continue
+            if d[i][j] == 0:
+                d[i][j] = d[i - 1][j - 1] + d[i][j - 1]
+    print(d[n][m])
