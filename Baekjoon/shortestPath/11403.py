@@ -1,30 +1,27 @@
-N = int(input())
-visited = [0 for i in range(N)]
-graph = []
-matrix = [[0] * N for i in range(N)]
+import sys
+INF = int(1e9)
+input = sys.stdin.readline
+n = int(input())
+graph = [[INF] * (n + 1) for _ in range(n + 1)]
 
-for i in range(N):
-    line = list(map(int, input().split()))
-    graph.append(line)
+for i in range(n):
+    tmp = list(map(int, input().split()))
+    for j in range(n):
+        if tmp[j] == 1:
+            graph[i + 1][j + 1] = 1
 
-def dfs(root):
-    for i in range(N):
-        if visited[i] == 0 and graph[root][i] == 1:
-            visited[i] = 1
-            dfs(i)
+for k in range(1, n + 1):
+    for a in range(1, n + 1):
+        for b in range(1, n + 1):
+            graph[a][b] = min(graph[a][b], graph[a][k] + graph[k][b])
 
-for i in range(N):
-    dfs(i)
-    for j in range(N):
-        if visited[j] == 1:
-            matrix[i][j] = 1
-        else:
-            matrix[i][j] = 0
+res = [[0] * n for _ in range(n)]
+for i in range(1, n + 1):
+    for j in range(1, n + 1):
+        if graph[i][j] < INF:
+            res[i - 1][j - 1] = 1
 
-    visited = [0 for i in range(N)]
-
-    for j in range(N):
-        print(matrix[i][j], end = ' ')
+for i in range(n):
+    for j in range(n):
+        print(res[i][j], end = ' ')
     print()
-
-
