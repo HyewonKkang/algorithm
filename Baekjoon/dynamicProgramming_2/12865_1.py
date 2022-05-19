@@ -1,3 +1,4 @@
+n, k = map(int, input().split())
 stuff = []
 dp = [0] * (k + 1)
 
