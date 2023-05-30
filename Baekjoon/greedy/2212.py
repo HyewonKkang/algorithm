@@ -1,0 +1,5 @@
+n = int(input())
+k = int(input())
+sensors = sorted(list(map(int, input().split())))
+gaps = sorted([sensors[i + 1] - sensors[i]  for i in range(0, n - 1)])
+print(sum(gaps[0:n-k]))
