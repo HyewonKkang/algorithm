@@ -1,30 +1,19 @@
-def correctBrackets(str):
+def isValidParentheses(s):
     stack = []
-    for s in str:
-        if s == '(' or s == '[' or s == '{':
-            stack.append(s)
+    opened, closed = ['[', '(', '{'], [']', ')', '}']
+    for p in s:
+        if p in opened:
+            stack.append(p)
         else:
             if not stack:
                 return False
-            if s == ')' and stack[-1] == '(':
-                stack.pop()
-            elif s == ']' and stack[-1] == '[':
-                stack.pop()
-            elif s == '}' and stack[-1] == '{':
-                stack.pop()
-
-    if len(stack) != 0:
-        return False
-
-    return True
+            for i in range(3):
+                if p == closed[i] and stack[-1] == opened[i]:
+                    stack.pop()
+    return len(stack) == 0
 
 def solution(s):
     answer = 0
     for i in range(len(s)):
-        str1 = s[0]
-        str2 = s[1:]
-        s = str2 + str1
-        if correctBrackets(s):
-            answer += 1
-
+        answer += isValidParentheses(s[i:] + s[0:i])
     return answer
