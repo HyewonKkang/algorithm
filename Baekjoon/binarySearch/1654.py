@@ -1,18 +1,18 @@
-K, N = map(int, input().split())
-arr = []
-for _ in range(K):
-    arr.append(int(input()))
-start = 1
-end = max(arr)
-res = 0
-while start <= end:
-    mid = (start + end) // 2
-    count = 0
-    for i in range(K):
-        count += arr[i] // mid
-    if count < N:
-        end = mid - 1
-    else:
-        res = mid
-        start = mid + 1
-print(res)
+k, n = map(int, input().split())
+cables = sorted([int(input()) for _ in range(k)])
+start, end = 1, cables[-1]
+answer = 0
+
+def binary_search(start, end):
+    global answer
+    while start <= end:
+        mid = (start + end) // 2
+        counts = sum([c // mid for c in cables])
+        if counts < n:
+            end = mid - 1
+        else:
+            answer = mid
+            start = mid + 1
+
+binary_search(start, end)
+print(answer)
