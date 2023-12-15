@@ -1,36 +1,32 @@
+from collections import defaultdict
 import math
-def calcTime(arr):
-    total_minutes = 0
-    for i in range(0, len(arr), 2):
-        if i + 1 < len(arr):
-            out_h, out_m = arr[i + 1][0], arr[i + 1][1]
-        else:
-            out_h, out_m = 23, 59
-        in_h, in_m = arr[i][0], arr[i][1]
-        total_minutes += (out_h * 60 + out_m) - (in_h * 60 + in_m)
 
-    return total_minutes
+def calcTime(s, e='23:59'):
+    sh, sm = list(map(int, s.split(':')))
+    eh, em = list(map(int, e.split(':')))
+    return (eh - sh) * 60 + (em - sm)
 
 def solution(fees, records):
-    answer = {}
-    record = {}
+    answer = []
+    basicTime, basicFee, unitTime, unitFee = fees
+    times = defaultdict(int)
+    cars = defaultdict(list)
+
+    def calcFee(time):
+        if time <= basicTime: return basicFee
+        return basicFee + math.ceil((time - basicTime) / unitTime) * unitFee
+
     for r in records:
-        tmp = r.split(' ')
-        h, m = map(int, tmp[0].split(':'))
-        if tmp[1] in record:
-            record[tmp[1]].append([h, m, tmp[2]])
+        time, car, type = r.split(' ')
+        if type == 'IN':
+            cars[car].append(time)
         else:
-            record[tmp[1]] = [[h, m, tmp[2]]]
+            times[car] += calcTime(cars[car].pop(), time)
 
-    for car in record:
-        parkedTime = calcTime(record[car])
-        if parkedTime < fees[0]:
-            answer[car] = fees[1]
-        else:
-            answer[car] = fees[1] + math.ceil((parkedTime - fees[0]) / fees[2]) * fees[3]
+    for car, val in cars.items():
+        if val: times[car] += calcTime(val[0])
 
-    res = []
-    dict = sorted(answer.items())
-    for d in dict:
-        res.append(d[1])
-    return res
+    sortedTime = sorted(times.items(), key=lambda x:x[0])
+    answer = [calcFee(time[1]) for time in sortedTime]
+
+    return answer
